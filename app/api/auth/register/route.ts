@@ -11,6 +11,20 @@ import {
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
+function parseDefaultTeamInitialBudgetCents() {
+  const raw = process.env.DEFAULT_TEAM_INITIAL_BUDGET_YUAN?.trim()
+  if (!raw) {
+    return 0n
+  }
+
+  const parsed = Number(raw)
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    return 0n
+  }
+
+  return BigInt(Math.round(parsed * 100))
+}
+
 export async function POST(request: NextRequest) {
   try {
     await ensureDefaultSuperAdmin()
@@ -20,7 +34,6 @@ export async function POST(request: NextRequest) {
     const name = typeof body.name === 'string' ? body.name.trim() : ''
     const password = typeof body.password === 'string' ? body.password : ''
     const teamName = typeof body.teamName === 'string' ? body.teamName.trim() : ''
-    const isCreateTeam = body.isCreateTeam === true
 
     if (!email || !name || !password) {
       return NextResponse.json(
@@ -51,70 +64,50 @@ export async function POST(request: NextRequest) {
 
     const hashedPassword = await hashPassword(password)
 
-    // If creating a team, create team first then user as admin
-    if (isCreateTeam && teamName) {
-      // Create team and admin user in a transaction
-      const result = await prisma.$transaction(async (tx) => {
-        // Create team
-        const team = await tx.team.create({
-          data: {
-            name: teamName,
-          },
-        })
-
-        // Create user as admin of the team
-        const user = await tx.user.create({
-          data: {
-            email,
-            name,
-            password: hashedPassword,
-            role: 'admin',
-            teamId: team.id,
-          },
-        })
-
-        return { user, team }
-      })
-
-      const token = generateToken(result.user.id)
-      resetAuthRateLimit(rateLimitKey)
-
-      return NextResponse.json({
-        user: {
-          id: result.user.id,
-          email: result.user.email,
-          name: result.user.name,
-          role: result.user.role,
-          isSuperAdmin: result.user.isSuperAdmin,
-          isActive: result.user.isActive,
-          teamId: result.team.id,
-          teamName: result.team.name,
-        },
-        token,
-      })
+    if (!teamName) {
+      return NextResponse.json(
+        { error: '请填写团队名称' },
+        { status: 400 }
+      )
     }
 
-    // Create individual user (no team)
-    const user = await prisma.user.create({
-      data: {
-        email,
-        name,
-        password: hashedPassword,
-      },
+    const initialBudgetCents = parseDefaultTeamInitialBudgetCents()
+
+    const result = await prisma.$transaction(async (tx) => {
+      const team = await tx.team.create({
+        data: {
+          name: teamName,
+          totalBudget: initialBudgetCents,
+        },
+      })
+
+      const user = await tx.user.create({
+        data: {
+          email,
+          name,
+          password: hashedPassword,
+          role: 'admin',
+          teamId: team.id,
+          allocatedBudget: initialBudgetCents,
+        },
+      })
+
+      return { user, team }
     })
 
-    const token = generateToken(user.id)
+    const token = generateToken(result.user.id)
     resetAuthRateLimit(rateLimitKey)
 
     return NextResponse.json({
       user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        isSuperAdmin: user.isSuperAdmin,
-        isActive: user.isActive,
-        teamId: user.teamId,
+        id: result.user.id,
+        email: result.user.email,
+        name: result.user.name,
+        role: result.user.role,
+        isSuperAdmin: result.user.isSuperAdmin,
+        isActive: result.user.isActive,
+        teamId: result.team.id,
+        teamName: result.team.name,
       },
       token,
     })

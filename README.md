@@ -112,6 +112,7 @@ REMOTE_ASSET_MAX_BYTES="5368709120"
 DEFAULT_SUPER_ADMIN_EMAIL="admin@example.com"
 DEFAULT_SUPER_ADMIN_PASSWORD="replace-with-your-own-strong-password"
 DEFAULT_SUPER_ADMIN_NAME="系统管理员"
+DEFAULT_TEAM_INITIAL_BUDGET_YUAN=""
 ```
 
 说明：
@@ -121,6 +122,7 @@ DEFAULT_SUPER_ADMIN_NAME="系统管理员"
 - `REMOTE_ASSET_MAX_BYTES` 控制远端结果转存大小上限，默认 5 GiB
 - 团队 API Key 建议登录后台后按团队配置，不建议直接写死在全局环境变量
 - `JWT_SECRET`、`ENCRYPTION_KEY`、`TASK_WEBHOOK_SECRET` 生产环境必须自己生成
+- `DEFAULT_TEAM_INITIAL_BUDGET_YUAN` 可选，适合给新注册团队预置一笔可用预算
 - `APP_PUBLIC_BASE_URL` 只适合本地开发时填 `http://localhost:8080`，上线后要改成你的公网域名，例如 `https://your-domain.com`
 
 #### 第三步：初始化数据库

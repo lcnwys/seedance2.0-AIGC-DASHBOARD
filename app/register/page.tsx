@@ -9,7 +9,6 @@ export default function RegisterPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [isCreateTeam, setIsCreateTeam] = useState(true)
   const [teamName, setTeamName] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -27,8 +26,7 @@ export default function RegisterPage() {
           name, 
           email, 
           password,
-          isCreateTeam,
-          teamName: isCreateTeam ? teamName : undefined,
+          teamName,
         }),
       })
 
@@ -66,7 +64,7 @@ export default function RegisterPage() {
             创建账号
           </h2>
           <p className="mt-2 text-zinc-400">
-            开始使用 Seedance 2.0 & Wan 2.7 创作平台
+            创建团队后即可进入后台配置模型和预算
           </p>
         </div>
 
@@ -77,49 +75,21 @@ export default function RegisterPage() {
             </div>
           )}
 
-          {/* Team Creation Toggle */}
-          <div className="flex gap-2 p-1 bg-zinc-900/50 rounded-xl">
-            <button
-              type="button"
-              onClick={() => setIsCreateTeam(true)}
-              className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
-                isCreateTeam 
-                  ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white' 
-                  : 'text-zinc-400 hover:text-zinc-200'
-              }`}
-            >
-              🏛️ 创建团队
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsCreateTeam(false)}
-              className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
-                !isCreateTeam 
-                  ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white' 
-                  : 'text-zinc-400 hover:text-zinc-200'
-              }`}
-            >
-              👤 个人账号
-            </button>
+          <div>
+            <label htmlFor="teamName" className="block text-sm font-medium text-zinc-300 mb-2">
+              团队名称
+            </label>
+            <input
+              id="teamName"
+              type="text"
+              required
+              value={teamName}
+              onChange={(e) => setTeamName(e.target.value)}
+              className="block w-full px-4 py-3 bg-zinc-900/50 border border-zinc-700 rounded-xl text-zinc-100 placeholder-zinc-500 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all"
+              placeholder="例如：漫剧工作室"
+            />
+            <p className="text-xs text-zinc-500 mt-1">注册后你将成为此团队的管理员</p>
           </div>
-
-          {isCreateTeam && (
-            <div>
-              <label htmlFor="teamName" className="block text-sm font-medium text-zinc-300 mb-2">
-                团队名称
-              </label>
-              <input
-                id="teamName"
-                type="text"
-                required={isCreateTeam}
-                value={teamName}
-                onChange={(e) => setTeamName(e.target.value)}
-                className="block w-full px-4 py-3 bg-zinc-900/50 border border-zinc-700 rounded-xl text-zinc-100 placeholder-zinc-500 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all"
-                placeholder="例如：漫剧工作室"
-              />
-              <p className="text-xs text-zinc-500 mt-1">你将成为此团队的管理员</p>
-            </div>
-          )}
 
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-zinc-300 mb-2">
@@ -170,16 +140,16 @@ export default function RegisterPage() {
             type="submit"
             disabled={isLoading}
             className="w-full flex justify-center py-3 px-4 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 btn-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? (
-              <span className="flex items-center gap-2">
+            >
+              {isLoading ? (
+                <span className="flex items-center gap-2">
                 <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
                 注册中...
               </span>
-            ) : isCreateTeam ? '创建团队并注册' : '注册'}
+            ) : '创建团队并注册'}
           </button>
         </form>
 

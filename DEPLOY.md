@@ -55,6 +55,7 @@ REMOTE_ASSET_MAX_BYTES="5368709120"
 DEFAULT_SUPER_ADMIN_EMAIL="admin@example.com"
 DEFAULT_SUPER_ADMIN_PASSWORD="replace-with-your-own-strong-password"
 DEFAULT_SUPER_ADMIN_NAME="系统管理员"
+DEFAULT_TEAM_INITIAL_BUDGET_YUAN=""
 ```
 
 说明：
@@ -64,6 +65,7 @@ DEFAULT_SUPER_ADMIN_NAME="系统管理员"
 - `APP_PUBLIC_BASE_URL` 用于回调地址和公开访问地址推导，生产环境建议填写完整域名。
 - `JWT_SECRET`、`ENCRYPTION_KEY`、`TASK_WEBHOOK_SECRET` 都应由你自己生成并长期稳定保存。
 - 只有在你明确填写 `DEFAULT_SUPER_ADMIN_EMAIL` 和 `DEFAULT_SUPER_ADMIN_PASSWORD` 后，系统才会自动创建首个超级管理员账号。
+- `DEFAULT_TEAM_INITIAL_BUDGET_YUAN` 可选，用来给新注册团队初始化一笔预算；填写后，注册人会自动拿到同等可用额度。
 - 如果旧版本已经用默认逻辑加密过团队 API Key，请在升级时把 `ENCRYPTION_KEY` 设置成旧环境里的同一个值。
 
 ## 4. 本地开发

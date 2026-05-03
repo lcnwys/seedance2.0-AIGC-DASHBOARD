@@ -1,0 +1,8 @@
+{
+  "id": "grsai-gpt-image-task-failed",
+  "progress": 100,
+  "results": [],
+  "status": "failed",
+  "failure_reason": "input_moderation",
+  "error": "Prompt failed input moderation"
+}

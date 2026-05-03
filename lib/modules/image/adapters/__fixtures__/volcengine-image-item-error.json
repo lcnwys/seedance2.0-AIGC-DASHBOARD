@@ -1,0 +1,17 @@
+{
+  "model": "doubao-seedream-5-0-260128",
+  "created": 1713924000,
+  "data": [
+    {
+      "error": {
+        "code": "OutputModeration",
+        "message": "Generated image failed moderation"
+      }
+    }
+  ],
+  "usage": {
+    "generated_images": 0,
+    "output_tokens": 0,
+    "total_tokens": 0
+  }
+}

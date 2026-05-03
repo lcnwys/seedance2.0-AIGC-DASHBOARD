@@ -1,0 +1,19 @@
+{
+  "id": "volcengine-video-task-failed",
+  "model": "seedance-1-0-pro-250528",
+  "status": "failed",
+  "created_at": 1713924000,
+  "updated_at": 1713924008,
+  "content": {},
+  "usage": {
+    "completion_tokens": 0,
+    "total_tokens": 0
+  },
+  "error": {
+    "code": "OutputModeration",
+    "message": "Generated video failed moderation"
+  },
+  "ratio": "16:9",
+  "resolution": "720p",
+  "duration": 5
+}

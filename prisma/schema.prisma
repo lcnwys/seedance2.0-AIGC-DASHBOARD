@@ -1,0 +1,333 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// Team model for group collaboration
+model Team {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+
+  // Team-level token pool (for statistics)
+  totalTokens BigInt @default(0) // Total token pool for the team
+  usedTokens  BigInt @default(0) // Total used tokens across all members
+
+  // Team-level budget pool (in cents/分, primary quota unit)
+  totalBudget BigInt @default(0) // Total budget in cents (分)
+  usedBudget  BigInt @default(0) // Total used budget in cents
+
+  // Seedance API configuration (encrypted)
+  seedanceApiKey         String? // Encrypted API Key
+  seedanceApiUrl         String  @default("https://ark.cn-beijing.volces.com")
+  defaultVideoProviderId String  @default("volcengine")
+  storageProviderId      String  @default("tos")
+
+  // Submission guard rails for multi-tenant usage
+  maxConcurrentTasks    Int     @default(5) // Team-wide active generation cap
+  maxRequestsPerMinute  Int     @default(20) // Team-wide submit cap per rolling minute
+  memberCooldownSeconds Int     @default(10) // Per-member cooldown between submits
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members         User[]
+  providerConfigs TeamProviderConfig[]
+}
+
+model User {
+  id       String @id @default(uuid())
+  email    String @unique
+  name     String
+  password String
+  apiKey   String @unique @default(uuid())
+
+  // Role: admin (can manage team members) or member
+  role     String  @default("member") // admin, member
+  isActive Boolean @default(true) // Account active status
+
+  // System-level super admin (can access all teams for reconciliation)
+  isSuperAdmin Boolean @default(false)
+
+  // Token usage tracking (for statistics only)
+  allocatedTokens BigInt @default(0) // Tokens allocated (legacy, for stats)
+  usedTokens      BigInt @default(0) // Tokens used (for stats)
+  reservedTokens  BigInt @default(0) // Tokens reserved (legacy)
+
+  // Budget quota (in cents/分, primary quota unit)
+  allocatedBudget BigInt @default(0) // Budget allocated in cents (分)
+  usedBudget      BigInt @default(0) // Budget used in cents
+  reservedBudget  BigInt @default(0) // Budget reserved for pending tasks
+
+  // Team relationship
+  teamId String?
+  team   Team?   @relation(fields: [teamId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  assets               Asset[]
+  generationTasks      GenerationTask[]
+  imageGenerationTasks ImageGenerationTask[]
+  storyboardProjects   StoryboardProject[]
+}
+
+model Asset {
+  id          String @id @default(uuid())
+  name        String
+  type        String // image, video, audio
+  url         String
+  size        Int
+  duration    Float? // for video/audio
+  contentType String
+
+  // Asset category: creation (AI generated) | subject (character/scene/prop)
+  category String @default("creation") // creation, subject
+
+  // For subject assets
+  subjectType String? // character, scene, prop
+  subjectName String? // e.g. "小明", "客厅"
+
+  // Reference to source asset (when saved from creation to subject)
+  sourceAssetId String?
+
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  generationTasks      GenerationTask[]               @relation("TaskAssets")
+  imageTaskReferences  ImageGenerationTaskReference[]
+  imageTaskOutputs     ImageGenerationTaskOutput[]
+  storyboardShotAssets StoryboardShotAsset[]
+
+  @@index([userId, createdAt])
+  @@index([userId, type, createdAt])
+  @@index([userId, category, createdAt])
+  @@index([userId, category, subjectType, createdAt])
+}
+
+model GenerationTask {
+  id                  String  @id @default(cuid())
+  batchId             String?
+  mode                String // text_to_video, first_frame, first_last_frame, reference
+  model               String  @default("doubao-seedance-2-0-260128")
+  modelKey            String?
+  providerId          String  @default("volcengine")
+  providerModelId     String?
+  prompt              String
+  promptAst           String? // 👈 新增：Slate.js AST JSON（直存直取，废弃正则解析）
+  referenceAssetOrder String?
+
+  // Generation params
+  ratio         String  @default("16:9")
+  duration      Int     @default(5)
+  resolution    String  @default("480p")
+  watermark     Boolean @default(false)
+  generateAudio Boolean @default(true)
+  promptExtend  Boolean @default(true)
+  seed          BigInt  @default(-1)
+
+  // Status
+  status     String  @default("pending") // pending, processing, succeeded, failed
+  externalId String? // cgt-xxxx from Seedance
+
+  // Result
+  outputUrl    String?
+  errorMessage String?
+
+  // Generation time tracking (in seconds)
+  generationTime Int? // Time taken to generate video in seconds
+
+  // Token usage
+  completionTokens Int?
+  totalTokens      Int?
+  estimatedTokens  Int? // calculated before generation
+
+  // Billing type based on whether video input was used
+  // with_video: 28 CNY / million tokens
+  // without_video: 46 CNY / million tokens
+  billingType String? // "with_video" | "without_video" | "refunded"
+
+  // Cost tracking (in cents/分 for precision)
+  estimatedCostCents Int? // Estimated cost in cents (分)
+  actualCostCents    Int? // Actual cost in cents (分)
+  costYuan           Float? // Actual cost in Yuan (for display)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  referenceAssets Asset[] @relation("TaskAssets")
+
+  @@index([batchId])
+  @@index([userId, createdAt])
+  @@index([userId, status, createdAt])
+}
+
+model ImageGenerationTask {
+  id              String  @id @default(cuid())
+  model           String  @default("doubao-seedream-5-0-260128")
+  modelKey        String?
+  providerId      String  @default("volcengine")
+  providerModelId String?
+  mode            String  @default("text_to_image")
+  prompt          String
+  promptAst       String?
+
+  size                      String  @default("2K")
+  outputFormat              String  @default("jpeg")
+  responseFormat            String  @default("url")
+  watermark                 Boolean @default(false)
+  promptExtend              Boolean @default(false)
+  sequentialImageGeneration String  @default("disabled")
+  maxImages                 Int?
+  optimizePromptMode        String  @default("standard")
+  enableWebSearch           Boolean @default(false)
+  editConfigJson            String?
+
+  status       String  @default("pending")
+  errorMessage String?
+
+  generatedImages Int?
+  outputTokens    Int?
+  totalTokens     Int?
+  costYuan        Float?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  references ImageGenerationTaskReference[]
+  outputs    ImageGenerationTaskOutput[]
+
+  @@index([userId, createdAt])
+  @@index([userId, status, createdAt])
+}
+
+model ImageGenerationTaskReference {
+  id        String   @id @default(cuid())
+  sortOrder Int
+  createdAt DateTime @default(now())
+
+  taskId String
+  task   ImageGenerationTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  assetId String
+  asset   Asset  @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@unique([taskId, sortOrder])
+  @@index([taskId])
+  @@index([assetId])
+}
+
+model ImageGenerationTaskOutput {
+  id           String   @id @default(cuid())
+  sortOrder    Int
+  sourceUrl    String?
+  size         String?
+  errorCode    String?
+  errorMessage String?
+  createdAt    DateTime @default(now())
+
+  taskId String
+  task   ImageGenerationTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  assetId String?
+  asset   Asset?  @relation(fields: [assetId], references: [id], onDelete: SetNull)
+
+  @@unique([taskId, sortOrder])
+  @@index([taskId])
+  @@index([assetId])
+}
+
+model TeamProviderConfig {
+  id              String   @id @default(uuid())
+  providerId      String
+  apiKeyEncrypted String?
+  apiUrl          String
+  isEnabled       Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  teamId String
+  team   Team   @relation(fields: [teamId], references: [id])
+
+  @@unique([teamId, providerId])
+  @@index([teamId])
+}
+
+model StoryboardProject {
+  id           String   @id @default(cuid())
+  title        String
+  type         String   @default("script") // script, storyboard
+  status       String   @default("draft") // draft, subject, shots, final
+  language     String   @default("zh")
+  mode         String   @default("dialogue")
+  ratio        String   @default("16:9")
+  themeId      String   @default("custom")
+  themeLabel   String?
+  minShotCount Int?
+  content      String?
+  coverUrl     String?
+  modeLabel    String?
+  isFavorite   Boolean  @default(false)
+  isOwned      Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  shots StoryboardShot[]
+
+  @@index([userId, updatedAt])
+}
+
+model StoryboardShot {
+  id          String   @id @default(cuid())
+  sortOrder   Int
+  title       String
+  visual      String
+  narration   String?
+  duration    Int      @default(5)
+  shotType    String?
+  cameraAngle String?
+  movement    String?
+  prompt      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  projectId String
+  project   StoryboardProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  assets StoryboardShotAsset[]
+
+  @@unique([projectId, sortOrder])
+  @@index([projectId, sortOrder])
+}
+
+model StoryboardShotAsset {
+  id        String   @id @default(cuid())
+  sortOrder Int
+  createdAt DateTime @default(now())
+
+  shotId String
+  shot   StoryboardShot @relation(fields: [shotId], references: [id], onDelete: Cascade)
+
+  assetId String
+  asset   Asset  @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@unique([shotId, sortOrder])
+  @@unique([shotId, assetId])
+  @@index([shotId])
+  @@index([assetId])
+}

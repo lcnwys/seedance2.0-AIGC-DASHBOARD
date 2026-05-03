@@ -1,0 +1,16 @@
+{
+  "id": "volcengine-video-task-running",
+  "model": "seedance-1-0-pro-250528",
+  "status": "queued",
+  "created_at": 1713924000,
+  "updated_at": 1713924003,
+  "content": {},
+  "usage": {
+    "completion_tokens": 0,
+    "total_tokens": 0
+  },
+  "ratio": "adaptive",
+  "resolution": "720p",
+  "duration": 5,
+  "generate_audio": false
+}

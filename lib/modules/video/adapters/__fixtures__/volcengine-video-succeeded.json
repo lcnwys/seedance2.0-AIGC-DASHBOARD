@@ -1,0 +1,19 @@
+{
+  "id": "volcengine-video-task-succeeded",
+  "model": "seedance-1-0-pro-250528",
+  "status": "succeeded",
+  "created_at": 1713924000,
+  "updated_at": 1713924012,
+  "content": {
+    "video_url": "https://example.com/generated-volcengine-video.mp4",
+    "last_frame_url": "https://example.com/generated-volcengine-last-frame.png"
+  },
+  "usage": {
+    "completion_tokens": 1234,
+    "total_tokens": 1234
+  },
+  "ratio": "16:9",
+  "resolution": "1080p",
+  "duration": 5,
+  "generate_audio": true
+}

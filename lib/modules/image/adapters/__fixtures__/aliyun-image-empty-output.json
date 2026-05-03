@@ -1,0 +1,15 @@
+{
+  "request_id": "aliyun-image-request-empty",
+  "output": {
+    "choices": [
+      {
+        "message": {
+          "content": []
+        }
+      }
+    ]
+  },
+  "usage": {
+    "image_count": 0
+  }
+}

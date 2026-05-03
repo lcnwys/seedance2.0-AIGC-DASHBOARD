@@ -1,0 +1,10 @@
+{
+  "id": "task-nano-banana",
+  "status": "succeeded",
+  "results": [
+    {
+      "url": "https://example.com/generated-nano-banana.png",
+      "content": "banana output"
+    }
+  ]
+}

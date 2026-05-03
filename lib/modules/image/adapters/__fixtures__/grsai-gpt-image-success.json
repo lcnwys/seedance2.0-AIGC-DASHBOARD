@@ -1,0 +1,10 @@
+{
+  "id": "task-gpt-image",
+  "status": "succeeded",
+  "results": [
+    {
+      "url": "https://example.com/generated-gpt-image.png"
+    }
+  ],
+  "generated_images": 1
+}

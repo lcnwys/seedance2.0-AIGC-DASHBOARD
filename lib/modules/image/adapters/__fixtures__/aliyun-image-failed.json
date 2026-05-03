@@ -1,0 +1,5 @@
+{
+  "request_id": "aliyun-image-request-failed",
+  "code": "InvalidParameter",
+  "message": "Invalid image generation parameters"
+}

@@ -1,0 +1,17 @@
+{
+  "output": {
+    "task_id": "aliyun-video-task-failed",
+    "task_status": "FAILED",
+    "submit_time": "2026-04-24 10:00:00",
+    "end_time": "2026-04-24 10:00:07",
+    "orig_prompt": "一个人在海边奔跑",
+    "model": "wan2.7-t2v",
+    "code": "ContentModeration",
+    "message": "Video generation failed moderation"
+  },
+  "usage": {
+    "ratio": "16:9",
+    "SR": 720
+  },
+  "request_id": "aliyun-video-request-failed"
+}

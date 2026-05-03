@@ -1,0 +1,20 @@
+{
+  "output": {
+    "task_id": "aliyun-video-task-succeeded",
+    "task_status": "SUCCEEDED",
+    "submit_time": "2026-04-24 10:00:00",
+    "end_time": "2026-04-24 10:00:12",
+    "orig_prompt": "一个人在海边奔跑",
+    "video_url": "https://example.com/generated-aliyun-video.mp4",
+    "model": "wan2.7-t2v"
+  },
+  "usage": {
+    "duration": 5,
+    "output_video_duration": 5,
+    "video_count": 1,
+    "SR": 1080,
+    "ratio": "16:9",
+    "size": "1920x1080"
+  },
+  "request_id": "aliyun-request-1"
+}

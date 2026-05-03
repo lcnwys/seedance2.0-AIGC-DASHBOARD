@@ -1,0 +1,18 @@
+{
+  "model": "doubao-seedream-5-0-260128",
+  "created": 1713988800,
+  "data": [
+    {
+      "url": "https://example.com/generated-volcengine-image.png",
+      "size": "2048x2048"
+    }
+  ],
+  "usage": {
+    "generated_images": 1,
+    "output_tokens": 10,
+    "total_tokens": 18,
+    "tool_usage": {
+      "web_search": 0
+    }
+  }
+}

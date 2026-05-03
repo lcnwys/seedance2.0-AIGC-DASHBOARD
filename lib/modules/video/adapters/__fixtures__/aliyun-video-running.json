@@ -1,0 +1,15 @@
+{
+  "output": {
+    "task_id": "aliyun-video-task-running",
+    "task_status": "RUNNING",
+    "submit_time": "2026-04-24 10:00:00",
+    "scheduled_time": "2026-04-24 10:00:04",
+    "orig_prompt": "一个人在海边奔跑",
+    "model": "wan2.7-t2v"
+  },
+  "usage": {
+    "ratio": "16:9",
+    "SR": 720
+  },
+  "request_id": "aliyun-request-2"
+}

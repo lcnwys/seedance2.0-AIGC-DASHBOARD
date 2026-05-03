@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050505;
+  --foreground: #fafafa;
+  --zinc-950: #09090b;
+  --zinc-900: #18181b;
+  --zinc-800: #27272a;
+  --zinc-700: #3f3f46;
+  --zinc-600: #52525b;
+  --zinc-500: #71717a;
+  --zinc-400: #a1a1aa;
+  --zinc-300: #d4d4d8;
+  --accent-blue: #3b82f6;
+  --accent-purple: #8b5cf6;
+  --accent-cyan: #06b6d4;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #050505;
+  color: #fafafa;
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow effects */
+.glow-blue {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(24, 24, 27, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(63, 63, 70, 0.5);
+}
+
+/* Input focus ring */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+/* Button hover glow */
+.btn-glow:hover {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+}

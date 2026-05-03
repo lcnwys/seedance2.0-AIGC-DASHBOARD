@@ -250,13 +250,13 @@ server {
 
 下面这两个位置我先帮你预留好，后面你可以直接替换成自己的微信二维码和群二维码。
 
-| 我的二维码 | 技术交流微信 |
+| 我的二维码 | 微信群二维码 |
 | --- | --- |
-| <img src="./docs/wechat-qrcode-placeholder.png" alt="我的二维码占位图" width="140" /> | <img src="./docs/group-qrcode-placeholder.svg" alt="群二维码占位图" width="140" /> |
+| <img src="./docs/wechat-qrcode-placeholder.png" alt="我的二维码占位图" width="120" /> | <img src="./docs/wechat-group-qrcode.png" alt="微信群二维码" width="120" /> |
 
 说明：
 
 - 左侧二维码位后面替换成你的个人微信二维码。
-- 右侧先放群二维码占位，等你处理好再换成真实图片。
-- 你把微信链接发我后，我可以继续帮你把左侧二维码生成成真正可扫码的版本。
+- 右侧已换成微信群二维码，当前显示尺寸也收紧了。
+- 你把个人微信二维码或链接发我后，我可以继续帮你补上左侧那一张。
 - 如果你希望，我也可以继续帮你把首页和登录页的联系入口同步改成这套信息。

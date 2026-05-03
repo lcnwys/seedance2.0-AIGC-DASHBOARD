@@ -69,6 +69,10 @@ function getTaskModelLabel(task: Task) {
     : getVideoModelConfig(task.model).label
 }
 
+function getTaskModelId(task: Task) {
+  return task.providerModelId || task.modelKey || task.model
+}
+
 function getTaskDurationLabel(task: Task) {
   if (task.mode === 'video_edit' && task.duration === 0) {
     return '原时长'
@@ -983,6 +987,12 @@ function VideoTaskBatchCard({
             </span>
             <span className="rounded bg-zinc-800 px-2 py-1 text-xs text-zinc-400">
               {primaryTask.ratio || getVideoModelConfig(primaryTask.model).defaultRatio}
+            </span>
+            <span className="rounded bg-blue-500/10 px-2 py-1 text-xs text-blue-300">
+              视频模型：{getTaskModelLabel(primaryTask)}
+            </span>
+            <span className="rounded bg-zinc-800 px-2 py-1 text-xs text-zinc-400" title={getTaskModelId(primaryTask)}>
+              ID：{getTaskModelId(primaryTask)}
             </span>
             <span className="rounded bg-zinc-800 px-2 py-1 text-xs text-zinc-400">
               {getTaskDurationLabel(primaryTask)}

@@ -68,6 +68,9 @@ export function TaskListPanel({
       ? getImageModelConfig(task.model).label
       : getVideoModelConfig(task.model).label
 
+  const getTaskModelId = (task: DashboardTask) =>
+    task.providerModelId || task.modelKey || task.model
+
   const getTaskTypeLabel = (task: DashboardTask) =>
     task.taskKind === 'image' ? '🖼️ 图片' : '🎬 视频'
 
@@ -225,7 +228,12 @@ export function TaskListPanel({
                     <div className="text-sm text-zinc-100">
                       {getTaskTypeLabel(task)} · {getProviderLabel(task.providerId)}
                     </div>
-                    <div className="mt-1 text-xs text-zinc-400">{getTaskModelLabel(task)}</div>
+                    <div className="mt-1 text-xs text-zinc-400">
+                      模型：{getTaskModelLabel(task)}
+                    </div>
+                    <div className="mt-1 text-[11px] text-zinc-500">
+                      ID：{getTaskModelId(task)}
+                    </div>
                     <div className="mt-1 text-xs text-zinc-500">模式 · {task.mode}</div>
                     <div className="mt-1 text-xs text-zinc-500">{new Date(task.createdAt).toLocaleString()}</div>
                   </div>
@@ -341,7 +349,8 @@ export function TaskListPanel({
                       <div className="text-sm text-zinc-300">
                         {getTaskTypeLabel(task)} · {getProviderLabel(task.providerId)}
                       </div>
-                      <div className="mt-1 text-xs text-zinc-500">{getTaskModelLabel(task)}</div>
+                      <div className="mt-1 text-xs text-zinc-500">模型：{getTaskModelLabel(task)}</div>
+                      <div className="mt-1 text-[11px] text-zinc-600">ID：{getTaskModelId(task)}</div>
                       <div className="mt-1 text-xs text-zinc-500">模式 · {task.mode}</div>
                       {(task.billingType === 'with_video' || task.referenceAssets?.some((asset) => asset.type === 'video')) && (
                         <span className="ml-1 text-xs text-blue-400">📹</span>

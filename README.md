@@ -124,6 +124,7 @@ DEFAULT_SUPER_ADMIN_NAME="系统管理员"
 - `REMOTE_ASSET_MAX_BYTES` 控制远端结果转存大小上限，默认 5 GiB
 - 团队 API Key 建议登录后台后按团队配置，不建议直接写死在全局环境变量
 - `JWT_SECRET`、`ENCRYPTION_KEY`、`TASK_WEBHOOK_SECRET` 生产环境必须自己生成
+- `APP_PUBLIC_BASE_URL` 只适合本地开发时填 `http://localhost:8080`，上线后要改成你的公网域名，例如 `https://your-domain.com`
 
 #### 第三步：初始化数据库
 
@@ -223,21 +224,7 @@ server {
 3. 选择对象存储方案
 4. 测试视频生成、素材转存、任务同步是否正常
 
-## 3. 云平台注册入口
-
-如果你还没有火山引擎或阿里云账号，可以直接通过下面的官方注册链接进入注册页面。
-
-| 火山引擎注册 | 阿里云注册 |
-| --- | --- |
-| [![火山引擎注册链接二维码](https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fconsole.volcengine.com%2Fauth%2Fsignup)](https://console.volcengine.com/auth/signup) | [![阿里云注册链接二维码](https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Faccount.aliyun.com%2Fregister%2Fregister.htm)](https://account.aliyun.com/register/register.htm) |
-| [火山引擎官方注册链接](https://console.volcengine.com/auth/signup) | [阿里云官方注册链接](https://account.aliyun.com/register/register.htm) |
-
-说明：
-
-- 上面的二维码均跳转到官方注册页面。
-- 如果二维码在你的网络环境中加载较慢，可以直接点击下方文字链接打开。
-
-## 4. 联系我
+## 3. 联系我
 
 ### 为什么可以放心联系我
 
@@ -261,15 +248,15 @@ server {
 
 ### 微信联系方式预留
 
-下面这两个位置我先帮你预留好，后面你可以直接替换成自己的二维码和微信号。
+下面这两个位置我先帮你预留好，后面你可以直接替换成自己的微信二维码和群二维码。
 
 | 我的二维码 | 技术交流微信 |
 | --- | --- |
-| ![我的二维码占位图](./docs/wechat-qrcode-placeholder.png) | `请填写你的技术交流微信号` |
+| <img src="./docs/wechat-qrcode-placeholder.png" alt="我的二维码占位图" width="140" /> | <img src="./docs/group-qrcode-placeholder.svg" alt="群二维码占位图" width="140" /> |
 
 说明：
 
-- 左侧二维码位可以直接替换成你的个人二维码图片。
-- 右侧微信号建议填写一个稳定可加的技术交流号。
+- 左侧二维码位后面替换成你的个人微信二维码。
+- 右侧先放群二维码占位，等你处理好再换成真实图片。
+- 你把微信链接发我后，我可以继续帮你把左侧二维码生成成真正可扫码的版本。
 - 如果你希望，我也可以继续帮你把首页和登录页的联系入口同步改成这套信息。
-

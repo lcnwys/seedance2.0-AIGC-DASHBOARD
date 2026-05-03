@@ -248,15 +248,6 @@ server {
 
 ### 微信联系方式预留
 
-下面这两个位置我先帮你预留好，后面你可以直接替换成自己的微信二维码和群二维码。
-
 | 我的二维码 | 微信群二维码 |
 | --- | --- |
-| <img src="./docs/wechat-qrcode-placeholder.png" alt="我的二维码占位图" width="120" /> | <img src="./docs/wechat-group-qrcode.png" alt="微信群二维码" width="120" /> |
-
-说明：
-
-- 左侧二维码位后面替换成你的个人微信二维码。
-- 右侧已换成微信群二维码，当前显示尺寸也收紧了。
-- 你把个人微信二维码或链接发我后，我可以继续帮你补上左侧那一张。
-- 如果你希望，我也可以继续帮你把首页和登录页的联系入口同步改成这套信息。
+| <img src="./docs/wechat-qrcode-placeholder.png" alt="我的二维码" width="120" /> | <img src="./docs/wechat-group-qrcode.png" alt="微信群二维码" width="120" /> |

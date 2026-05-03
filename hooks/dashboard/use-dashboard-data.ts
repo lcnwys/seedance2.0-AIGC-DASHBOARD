@@ -203,7 +203,7 @@ export function useDashboardData({
       })
       if (response.ok) {
         const data = await response.json()
-        setIsConfigAdmin(data.isAdmin)
+        setIsConfigAdmin(Boolean(data.isAdmin || userObj.role === 'admin'))
         setApiKeyConfigured(data.apiKeyConfigured)
         setIsSuperAdmin(data.isSuperAdmin || false)
         setVideoProviderId(data.providerId || 'volcengine')

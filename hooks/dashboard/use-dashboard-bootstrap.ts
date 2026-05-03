@@ -111,12 +111,33 @@ export function useDashboardBootstrap<TUser>({
       setUser(storedUser)
     }
 
+    const refreshAuthSession = async () => {
+      try {
+        const response = await fetch('/api/auth/me', {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+
+        if (!response.ok) {
+          return
+        }
+
+        const data = await response.json()
+        if (data?.user) {
+          localStorage.setItem('user', JSON.stringify(data.user))
+          setUser(data.user)
+        }
+      } catch (error) {
+        console.error('Failed to refresh auth session:', error)
+      }
+    }
+
     if (!storedUser || !(storedUser as any).teamId) {
       const { seedanceUrl } = getStoredSeedanceConfig()
       setApiKey('')
       setSeedanceUrl(seedanceUrl)
     }
 
+    void refreshAuthSession()
     void callbacksRef.current.fetchAssets()
     void callbacksRef.current.fetchStats()
     void callbacksRef.current.fetchTeamData()
